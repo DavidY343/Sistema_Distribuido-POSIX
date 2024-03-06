@@ -1,5 +1,6 @@
 
 #include "claves.h"
+#include "list.h"
 
 int init()
 {

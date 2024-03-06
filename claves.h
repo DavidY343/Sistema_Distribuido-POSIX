@@ -1,15 +1,6 @@
 #ifndef CLAVES_H
  #define CLAVES_H
- #include "list.h"
 
-// Definir la estructura
-/*typedef struct s_mensaje
-{
-	int key;
-	char v1[256];
-	int N;
-	double *v2;
-} t_mensaje;*/
 
 /**
  * @brief Esta llamada permite inicializar el servicio de elementos clave-valor1-valor2.
