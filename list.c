@@ -4,6 +4,9 @@
 #include "list.h"
 
 
+List messages = NULL;
+
+
 int init_list(List *l)
 {
 	*l = NULL;

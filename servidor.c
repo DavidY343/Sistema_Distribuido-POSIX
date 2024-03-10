@@ -28,7 +28,7 @@ void treat_request(void *mess)
 			error = set_value(message.node.key, message.node.v1, message.node.N, message.node.v2);
 			break;
 		case 2:
-			error = get_value(message.node.key, message.node.v1, message.node.N, message.node.v2);
+			error = get_value(message.node.key, message.node.v1, &message.node.N, message.node.v2);
 			break;
 		case 3:
 			error = modify_value(message.node.key, message.node.v1, message.node.N, message.node.v2);

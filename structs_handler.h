@@ -3,9 +3,9 @@
 #include "list.h"
 
 struct request{ 
-    int         operation;
+    int         op;
 	struct Node node;
-    char        queue[256];
+    char        queue[MAX_VALUE_LENGTH];
 };
 
 #endif

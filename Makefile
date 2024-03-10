@@ -1,51 +1,31 @@
-CC=gcc
-CFLAGS=-g -Wall
-LDFLAGS=-ldinamica -L.
-LD_LIBRARY_PATH := $(LD_LIBRARY_PATH):.
+CC = gcc
+CFLAGS = -fPIC -Wall -g
+LDFLAGS =
+LDLIBS =
 
-all: libdinamica.so main
+PROXY_SOURCES = proxy.c  # Agrega aquí todos los archivos fuente relevantes
 
-libdinamica.so: lib_hola.o
-	$(CC) -shared -Wl,-soname,libdinamica.so -o libdinamica.so.1.0 lib_hola.o
-	ln -s libdinamica.so.1.0 libdinamica.so
+PROXY_OBJECTS = $(PROXY_SOURCES:.c=.o)
 
-lib_hola.o: lib_hola.c
-	$(CC) $(CFLAGS) -fPIC -c lib_hola.c -o lib_hola.o
+PROXY = libproxy.so
+SERVER = server
+CLIENT = cliente
 
-main: main.o
-	$(CC) $(CFLAGS) -o main main.o $(LDFLAGS)
-
-main.o: main.c
-	$(CC) $(CFLAGS) -c main.c -o main.o
-
-clean:
-	rm -f *.o *.so* main
+all: $(PROXY) $(SERVER) $(CLIENT)
+	
 
 
-#
-#BIN_FILES  = ejemplo_lista
-
-#CC = gcc
-
-#CPPFLAGS = -I$(INSTALL_PATH)/include -Wall
-
-#LDFLAGS = -L$(INSTALL_PATH)/lib/
-#LDLIBS = -lpthread -lm
-
-
-#all: $(BIN_FILES)
-.PHONY : all
-
-
-ejemplo_lista: ejemplo_lista.o list.o
-	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
+$(PROXY): $(PROXY_OBJECTS)
+	$(CC) -shared -o $(PROXY) $(PROXY_OBJECTS) $(LDFLAGS) $(LDLIBS)
 
 %.o: %.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(CLIENT): cliente.o
+	$(CC) -o $(CLIENT) cliente.o $(LDFLAGS) $(LDLIBS) -L. -lproxy
+
+$(SERVER): servidor.o claves.o list.o
+	$(CC) -o $(SERVER) servidor.o claves.o list.o
 
 clean:
-	rm -f $(BIN_FILES) *.o
-
-.SUFFIXES:
-.PHONY : clean
-//
+	rm -f $(PROXY) $(PROXY_OBJECTS) $(CLIENT) $(SERVER) *.o

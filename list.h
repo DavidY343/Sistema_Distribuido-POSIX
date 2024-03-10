@@ -2,7 +2,7 @@
 #define _LISTA_H        1
 
 #define MAX_VALUE_LENGTH	256
-
+#include <stddef.h>
 struct Node{ 
 	char 	v1[MAX_VALUE_LENGTH];
 	int 	key;
@@ -13,8 +13,6 @@ struct Node{
 
 
 typedef struct Node * List;
-
-List messages = NULL;
 
 int init_list(List *l);
 int set(List *l, char *v1,  int key, int N, double *v2);
