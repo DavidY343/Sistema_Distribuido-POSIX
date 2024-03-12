@@ -7,7 +7,8 @@
 
 int main() {
     // Se inicializa el proxy
-    if (init_proxy() == -1) {
+    if (init_proxy() == -1)
+	{
         fprintf(stderr, "Error initializing proxy.\n");
         exit(EXIT_FAILURE);
     }
@@ -18,7 +19,8 @@ int main() {
     int N_value2 = 3;
     double V_value2[] = {1.1, 2.2, 3.3};
 
-    // Establecer un valor
+    // Establecer un valor´
+	printf("Avance\n");
     if (set_value_proxy(key, value1, N_value2, V_value2) == -1) {
         fprintf(stderr, "Error setting value.\n");
         exit(EXIT_FAILURE);
@@ -29,6 +31,7 @@ int main() {
     int N_value2_get = 3;
     double V_value2_get[N_value2_get];
 
+	printf("Avance\n");
     if (get_value_proxy(key, value1_get, &N_value2_get, V_value2_get) == -1) {
         fprintf(stderr, "Error getting value.\n");
         exit(EXIT_FAILURE);

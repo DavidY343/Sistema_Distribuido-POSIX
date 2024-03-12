@@ -3,7 +3,7 @@ CFLAGS = -fPIC -Wall -g
 LDFLAGS =
 LDLIBS =
 
-PROXY_SOURCES = proxy.c  # Agrega aquí todos los archivos fuente relevantes
+PROXY_SOURCES = proxy.c
 
 PROXY_OBJECTS = $(PROXY_SOURCES:.c=.o)
 
@@ -22,10 +22,12 @@ $(PROXY): $(PROXY_OBJECTS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(CLIENT): cliente.o
-	$(CC) -o $(CLIENT) cliente.o $(LDFLAGS) $(LDLIBS) -L. -lproxy
+	$(CC) -o $(CLIENT) cliente.o $(LDFLAGS) $(LDLIBS) -L. -lproxy -Wl,-rpath,.
 
 $(SERVER): servidor.o claves.o list.o
 	$(CC) -o $(SERVER) servidor.o claves.o list.o
 
 clean:
 	rm -f $(PROXY) $(PROXY_OBJECTS) $(CLIENT) $(SERVER) *.o
+
+re: clean all

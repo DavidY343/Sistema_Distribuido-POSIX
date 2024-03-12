@@ -2,10 +2,15 @@
 #include "claves.h"
 #include "list.h"
 
+List messages;
+
 int init()
 {
-	destroy(&messages);
-	init_list(&messages);
+	if (destroy(&messages) == -1)
+		return (-1);
+	if (init_list(&messages) == -1)
+		return (-1);
+	return (0);
 }
 
 int set_value(int key, char *value1, int N_value2, double *V_value2)

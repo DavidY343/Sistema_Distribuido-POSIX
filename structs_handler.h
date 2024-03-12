@@ -4,8 +4,21 @@
 
 struct request{ 
     int         op;
-	struct Node node;
+	char 	v1[MAX_VALUE_LENGTH];
+	int 	key;
+	int 	N;
+	double	*v2;
     char        queue[MAX_VALUE_LENGTH];
+};
+
+struct response{ 
+    int         op;
+	char 	v1[MAX_VALUE_LENGTH];
+	int 	key;
+	int 	N;
+	double	*v2;
+    char        queue[MAX_VALUE_LENGTH];
+	int error;
 };
 
 #endif
