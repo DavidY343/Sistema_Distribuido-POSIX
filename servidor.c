@@ -88,7 +88,6 @@ int main(void)
 
 	attr.mq_maxmsg = 10;
 	attr.mq_msgsize = sizeof(struct request);
-	printf("Hola\n");
 	q_server = mq_open("/SERVER", O_CREAT | O_RDONLY, 0777, &attr);
 	if (q_server == -1)
 	{
@@ -102,7 +101,7 @@ int main(void)
 	pthread_attr_setdetachstate(&t_attr, PTHREAD_CREATE_DETACHED);
 	while(1)
 	{
-		if (mq_receive(q_server, (char *) &message, sizeof(message), NULL) < 0 )
+		if (mq_receive(q_server, (char *) &message, sizeof(struct request), NULL) < 0 )
 		{
 			perror("mq_receive");
 			return -1;
