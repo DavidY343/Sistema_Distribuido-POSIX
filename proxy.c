@@ -3,7 +3,7 @@
 
 mqd_t q_client; 
 mqd_t q_server; 
-struct request message;
+struct request message;	
 struct response res;
 struct mq_attr attr;
 char queue[MAX_VALUE_LENGTH];
@@ -15,13 +15,13 @@ int init_queue()
 	attr.mq_msgsize = sizeof(struct request);
 
 	sprintf(queue, "/Queue-%d", getpid());
-	q_client = mq_open(queue, O_CREAT|O_RDONLY, 0777, &attr);
+	q_client = mq_open(queue, O_CREAT|O_RDONLY, 0666, &attr);
 	if (q_client == -1)
 	{
 		perror("mq_open 1");
 		return (-1);
 	}
-	q_server = mq_open("/SERVER", O_WRONLY, 0700, &attr);
+	q_server = mq_open("/SERVER", O_WRONLY);
 	if (q_server == -1)
 	{
 		perror("mq_open 2");
@@ -35,24 +35,26 @@ int communication()
 	if (mq_send(q_server, (const char *)&message, sizeof(struct request), 0) < 0)
 	{
 		perror("mq_send");
+		mq_close(q_server);
+        mq_close(q_client);
+        mq_unlink(queue);
 		return (-1);
 	}
-	printf("ahhh\n");
-	if (mq_receive(q_client, (char *)&res, sizeof(struct response) + 5, 0) < 0)
+	if (mq_receive(q_client, (char *)&res, sizeof(struct response), 0) < 0)
 	{
-		perror("mq_receiveded");
+		perror("mq_receive");
+		mq_close(q_server);
+        mq_close(q_client);
+        mq_unlink(queue);
 		return (-1);
 	}
-	printf("ahhh\n");
 	return (0);
 }
 
 int init_proxy()
 {
-	printf("before init_quee\n");
 	if (init_queue() == -1)
 		return (-1);
-	printf("after init_quee\n");
 	message.op = 0;
 	strcpy(message.queue, queue);
 	if (communication() == -1)
@@ -66,22 +68,15 @@ int init_proxy()
 
 int set_value_proxy(int key, char *value1, int N_value2, double *V_value2)
 {
-	printf("before init_quee\n");
 	if (init_queue() == -1)
 		return (-1);
-	printf("after init_quee\n");
 	message.op = 1;
-	printf("after init_quee\n");
 	strcpy(message.queue, queue);
-	printf("after init_quee\n");
 	message.key = key;
-	printf("after init_quee\n");
 	message.N = N_value2;
-	printf("after init_quee\n");
 	strcpy(message.v1, value1);
-	printf("after init_quee\n");
-	memcpy(message.v2, V_value2, N_value2 * sizeof(double));
-	printf("before com\n");
+	for (int i = 0; i < N_value2; i++)
+    	message.v2[i] = V_value2[i];
 	if (communication() == -1)
 		return (-1);
 	if (res.error != 0)

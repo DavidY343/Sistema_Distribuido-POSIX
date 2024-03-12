@@ -1,13 +1,15 @@
 #ifndef _LISTA_H
 #define _LISTA_H        1
 
+#define MAX_N 32
 #define MAX_VALUE_LENGTH	256
 #include <stddef.h>
+
 struct Node{ 
 	char 	v1[MAX_VALUE_LENGTH];
 	int 	key;
 	int 	N;
-	double	*v2;
+	double	v2[MAX_N];
 	struct 	Node *next; 
 };
 

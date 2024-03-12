@@ -72,6 +72,11 @@ void print_message(struct request message) {
     printf("Operation: %d\n", message.op);
     printf("Node: key=%d, v1=%s, N=%d\n", message.key, message.v1, message.N);
     printf("Queue: %s\n", message.queue);
+	printf("Contenido de v2:\n");
+    for (int i = 0; i < message.N; i++) {
+        printf("%f ", message.v2[i]);
+    }
+    printf("\n");
 }
 
 int main(void)
@@ -97,7 +102,7 @@ int main(void)
 	pthread_attr_setdetachstate(&t_attr, PTHREAD_CREATE_DETACHED);
 	while(1)
 	{
-		if (mq_receive(q_server, (char *) &message, sizeof(struct request), 0) < 0 )
+		if (mq_receive(q_server, (char *) &message, sizeof(message), NULL) < 0 )
 		{
 			perror("mq_receive");
 			return -1;

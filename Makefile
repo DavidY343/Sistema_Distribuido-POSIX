@@ -22,10 +22,10 @@ $(PROXY): $(PROXY_OBJECTS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(CLIENT): cliente.o
-	$(CC) -o $(CLIENT) cliente.o $(LDFLAGS) $(LDLIBS) -L. -lproxy -Wl,-rpath,.
+	$(CC) -o $(CLIENT) cliente.o $(LDFLAGS) $(LDLIBS) -lrt -L. -lproxy -Wl,-rpath,.
 
 $(SERVER): servidor.o claves.o list.o
-	$(CC) -o $(SERVER) servidor.o claves.o list.o
+	$(CC) -g -o $(SERVER) servidor.o claves.o list.o -lrt
 
 clean:
 	rm -f $(PROXY) $(PROXY_OBJECTS) $(CLIENT) $(SERVER) *.o

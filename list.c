@@ -20,16 +20,11 @@ int set(List *l, char *v1, int key, int N, double *v2)
     strcpy(newNode->v1, v1);
     newNode->key = key;
     newNode->N = N;
-    newNode->v2 = (double *)malloc(N * sizeof(double));
-    if (newNode->v2 == NULL)
-	{
-        free(newNode);
-        return -1;
-    }
-    memcpy(newNode->v2, v2, N * sizeof(double)); // MIrar si esto me meto mas datos de los que deberia
+    for (int i = 0; i < N; i++)
+        (*l)->v2[i] = v2[i];
     newNode->next = *l;
     *l = newNode;
-
+    printf("aqui\n");
     return 0;
 }
 
@@ -69,10 +64,8 @@ int modify_element(List l, int key, char *new_v1, int new_N, double *new_v2)
             strcpy(l->v1, new_v1);
             l->N = new_N;
             free(l->v2);
-            l->v2 = (double *)malloc(new_N * sizeof(double));
-            if (l->v2 == NULL)
-                return -1;
-            memcpy(l->v2, new_v2, new_N * sizeof(double));
+            for (int i = 0; i < new_N; i++)
+                l->v2[i] = new_v2[i];
             return 0;
         }
         l = l->next;
@@ -108,7 +101,6 @@ int destroy(List *l)
 	{
         temp = *l;
         *l = (*l)->next;
-        free(temp->v2);
         free(temp);
     }
 	return 0;
