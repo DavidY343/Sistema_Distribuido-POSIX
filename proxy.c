@@ -21,10 +21,12 @@ int init_queue()
 		perror("mq_open 1");
 		return (-1);
 	}
-	q_server = mq_open("/SERVER", O_WRONLY);
+	attr.mq_maxmsg = 10;
+	attr.mq_msgsize = sizeof(struct request);
+	q_server = mq_open("/SERVER", O_CREAT | O_WRONLY, 0777, &attr);
 	if (q_server == -1)
 	{
-		perror("mq_open 2");
+		perror("mq_open");
 		return (-1);
 	}
 	return (0);
@@ -32,6 +34,8 @@ int init_queue()
 
 int communication()
 {
+	printf("Tamano de struct: %ld, Tamano de mensaje: %ld\n", sizeof(struct request), sizeof(message));
+	printf("Tamaño por separado: %ld \n", sizeof(message.key) + sizeof(message.N) + sizeof(message.op) + sizeof(message.queue) + sizeof(message.v1) + sizeof(message.v2));
 	if (mq_send(q_server, (const char *)&message, sizeof(struct request), 0) < 0)
 	{
 		perror("mq_send");
