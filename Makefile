@@ -1,14 +1,20 @@
+# Variables 
 CC = gcc
-CFLAGS = -fPIC -Wall -g
-LDFLAGS =
-LDLIBS =
+CFLAGS = -Wall -Werror
 
+# LIBRERIA DINAMICA
 PROXY_SOURCES = proxy.c
-
 PROXY_OBJECTS = $(PROXY_SOURCES:.c=.o)
+PROXY = libclaves.so
 
-PROXY = libproxy.so
-SERVER = server
+#SERVIDOR 
+SERVER_SOURCES = servidor.c claves.c list.c
+SERVER_OBJECTS = $(SERVER_SOURCES:.c=.o)
+SERVER = servidor
+
+#CLIENTE
+CLIENT_SOURCES = cliente.c
+CLIENT_OBJECTS = $(CLIENT_SOURCES:.c=.o)
 CLIENT = cliente
 
 all: $(PROXY) $(SERVER) $(CLIENT)
@@ -16,18 +22,26 @@ all: $(PROXY) $(SERVER) $(CLIENT)
 
 
 $(PROXY): $(PROXY_OBJECTS)
-	$(CC) -shared -o $(PROXY) $(PROXY_OBJECTS) $(LDFLAGS) $(LDLIBS) -lrt
+	$(CC) -shared -o $(PROXY) $(PROXY_OBJECTS) -lrt
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+$(PROXY_OBJECTS): $(PROXY_SOURCES)
+	$(CC) $(CFLAGS) -fPIC -c $< -o $@
 
-$(CLIENT): cliente.o
-	$(CC) -o $(CLIENT) cliente.o $(LDFLAGS) $(LDLIBS) -lrt -L. -lproxy -Wl,-rpath,.
+$(CLIENT): $(CLIENT_OBJECTS)
+	$(CC) $(CFLAGS) -o $(CLIENT) $(CLIENT_OBJECTS) -L. -lclaves -Wl,-rpath,. -lpthread
 
-$(SERVER): servidor.o claves.o list.o
-	$(CC) -g -o $(SERVER) servidor.o claves.o list.o -lrt -lpthread
+$(SERVER): $(SERVER_OBJECTS)
+	$(CC) $(CFLAGS) -o $(SERVER) $(SERVER_OBJECTS) -lrt -lpthread
 
+runc:
+	./cliente
+
+runs:
+	./servidor
+
+fclean: clean
+	rm -f $(CLIENT) $(SERVER) $(PROXY)
 clean:
-	rm -f $(PROXY) $(PROXY_OBJECTS) $(CLIENT) $(SERVER) *.o
+	rm -f $(PROXY_OBJECTS) $(SERVER_OBJECTS) $(CLIENT_OBJECTS)
 
-re: clean all
+re: fclean all

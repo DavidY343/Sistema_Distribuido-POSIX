@@ -5,7 +5,7 @@
 #include "claves.h"
 #include <string.h>
 #include "proxy.h"
-#define NUM_THREADS 5
+#define NUM_THREADS 50
 
 void *thread_function(void *arg) {
     int key = *((int *)arg);

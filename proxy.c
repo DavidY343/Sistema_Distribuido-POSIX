@@ -86,7 +86,7 @@ int set_value_proxy(int key, char *value1, int N_value2, double *V_value2)
 	if (res.error != 0)
 		printf("Error in set_value\n");
 	else
-		printf("Set value\n");
+		printf("Value set\n");
 	return (0);
 }
 
