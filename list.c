@@ -21,10 +21,9 @@ int set(List *l, char *v1, int key, int N, double *v2)
     newNode->key = key;
     newNode->N = N;
     for (int i = 0; i < N; i++)
-        (*l)->v2[i] = v2[i];
+        newNode->v2[i] = v2[i];
     newNode->next = *l;
     *l = newNode;
-    printf("aqui\n");
     return 0;
 }
 
@@ -63,7 +62,6 @@ int modify_element(List l, int key, char *new_v1, int new_N, double *new_v2)
 		{
             strcpy(l->v1, new_v1);
             l->N = new_N;
-            free(l->v2);
             for (int i = 0; i < new_N; i++)
                 l->v2[i] = new_v2[i];
             return 0;
@@ -89,7 +87,6 @@ int delete_element(List *l, int key)
         *l = current->next;
     else
         prev->next = current->next;
-    free(current->v2);
     free(current);
     return 0;
 }

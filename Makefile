@@ -16,7 +16,7 @@ all: $(PROXY) $(SERVER) $(CLIENT)
 
 
 $(PROXY): $(PROXY_OBJECTS)
-	$(CC) -shared -o $(PROXY) $(PROXY_OBJECTS) $(LDFLAGS) $(LDLIBS)
+	$(CC) -shared -o $(PROXY) $(PROXY_OBJECTS) $(LDFLAGS) $(LDLIBS) -lrt
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -25,7 +25,7 @@ $(CLIENT): cliente.o
 	$(CC) -o $(CLIENT) cliente.o $(LDFLAGS) $(LDLIBS) -lrt -L. -lproxy -Wl,-rpath,.
 
 $(SERVER): servidor.o claves.o list.o
-	$(CC) -g -o $(SERVER) servidor.o claves.o list.o -lrt
+	$(CC) -g -o $(SERVER) servidor.o claves.o list.o -lrt -lpthread
 
 clean:
 	rm -f $(PROXY) $(PROXY_OBJECTS) $(CLIENT) $(SERVER) *.o

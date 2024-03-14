@@ -34,8 +34,8 @@ int init_queue()
 
 int communication()
 {
-	printf("Tamano de struct: %ld, Tamano de mensaje: %ld\n", sizeof(struct request), sizeof(message));
-	printf("Tamaño por separado: %ld \n", sizeof(message.key) + sizeof(message.N) + sizeof(message.op) + sizeof(message.queue) + sizeof(message.v1) + sizeof(message.v2));
+	// printf("Tamano de struct: %ld, Tamano de mensaje: %ld\n", sizeof(struct request), sizeof(message));
+	// printf("Tamaño por separado: %ld \n", sizeof(message.key) + sizeof(message.N) + sizeof(message.op) + sizeof(message.queue) + sizeof(message.v1) + sizeof(message.v2));
 	if (mq_send(q_server, (const char *)&message, sizeof(struct request), 0) < 0)
 	{
 		perror("mq_send");
@@ -105,7 +105,13 @@ int get_value_proxy(int key, char *value1, int *N_value2, double *V_value2)
 	if (res.error != 0)
 		printf("Error in get_value\n");
 	else
-		printf("Your values: v1: %s, N2: %d\n", message.v1, message.N);
+	{
+		printf("Your values: v1: %s, N2: %d\n", res.v1, res.N);
+		printf("Contenido de v2:\n");
+    	for (int i = 0; i < res.N; i++)
+        	printf("%f ", res.v2[i]);
+		printf("\n");
+	}
 	return (0);
 }
 
@@ -124,7 +130,7 @@ int modify_value_proxy(int key, char *value1, int N_value2, double *V_value2)
 	if (res.error != 0)
 		printf("Error in modify_value\n");
 	else
-		printf("Modify succesful");
+		printf("Modify succesful\n");
 	return (0);
 }
 
@@ -148,7 +154,7 @@ int exist_proxy(int key)
 {
 	if (init_queue() == -1)
 		return (-1);
-	message.op = 4;
+	message.op = 5;
 	strcpy(message.queue, queue);
 	message.key = key;
 	if (communication() == -1)

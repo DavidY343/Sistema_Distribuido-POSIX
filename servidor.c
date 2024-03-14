@@ -32,6 +32,11 @@ void treat_request(void *mess)
 			break;
 		case 2:
 			res.error = get_value(message.key, message.v1, &message.N, message.v2);
+			res.key = message.key;
+			res.N = message.N;
+			strcpy(res.v1, message.v1);
+			for (int i = 0; i < res.N; i++)
+    			res.v2[i] = message.v2[i];
 			break;
 		case 3:
 			res.error = modify_value(message.key, message.v1, message.N, message.v2);
@@ -55,7 +60,6 @@ void treat_request(void *mess)
 	}
 	else
 	{
-		printf("Voy a enviar\n");
 		if (mq_send(q_client, ( char *) &res, sizeof(struct request), 0) < 0)
 		{
 			perror("mq_send");
@@ -63,7 +67,6 @@ void treat_request(void *mess)
 			mq_unlink("/SERVER");
 			mq_close(q_client);
 		}
-		printf("Enviado\n");
 	}
 	pthread_exit(0);
 }
@@ -106,7 +109,7 @@ int main(void)
 			perror("mq_receive");
 			return -1;
 		}
-		print_message(message);
+		// print_message(message);
 		if (pthread_create(&thid, &t_attr, (void *)treat_request, (void *)&message)== 0)
 		{
 			pthread_mutex_lock(&mutex_mensaje);
