@@ -38,24 +38,6 @@ int exist_element(List l, int key)
     return (-1);
 }
 
-void imprimir_lista(List head)
-{
-    struct Node *current = head;
-    // Iterar sobre todos los nodos de la lista
-    while (current != NULL) {
-        printf("v1: %s\n", current->v1);
-        printf("key: %d\n", current->key);
-        printf("N: %d\n", current->N);
-        printf("v2: ");
-        for (int i = 0; i < current->N; i++) {
-            printf("%f ", current->v2[i]);
-        }
-        printf("\n\n");
-
-        current = current->next; // Avanzar al siguiente nodo
-    }
-}
-
 int get_element(List l, int key, char *value1, int *N_value2, double *V_value2)
 {
     while (l != NULL)

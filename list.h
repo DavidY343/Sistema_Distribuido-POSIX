@@ -15,7 +15,6 @@ struct Node{
 
 
 typedef struct Node * List;
-void imprimir_lista(List head);
 int init_list(List *l);
 int set(List *l, char *v1,  int key, int N, double *v2);
 int exist_element(List l, int key);

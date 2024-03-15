@@ -38,7 +38,6 @@ int set_value(int key, char *value1, int N_value2, double *V_value2)
 		}
 		inited_list = 1;
 	}
-	imprimir_lista(messages);
 	if (exist_element(messages, key) == 0)
 	{
 		pthread_mutex_unlock(&mutex);
@@ -171,3 +170,29 @@ int exist(int key)
 		return (-1);
 	}
 }
+
+//Por si alguien quisiera ver la lista, no te olvide de incluir en el .h
+/*void print_list()
+{
+    printf("Quiero imprimir la lista\n");
+    if (messages == NULL) {
+        printf("La lista está vacía\n");
+        return;
+    }
+
+    List current = messages;
+    // Iterar sobre todos los nodos de la lista
+    while (current != NULL) {
+        printf("v1: %s\n", current->v1);
+        printf("key: %d\n", current->key);
+        printf("N: %d\n", current->N);
+        printf("v2: ");
+        for (int i = 0; i < current->N; i++) {
+            printf("%f ", current->v2[i]);
+        }
+        printf("\n\n");
+
+        current = current->next; // Avanzar al siguiente nodo
+    }
+}*/
+

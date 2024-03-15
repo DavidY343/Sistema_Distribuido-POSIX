@@ -31,9 +31,14 @@ $(CLIENT): $(CLIENT_OBJECTS)
 $(SERVER): $(SERVER_OBJECTS)
 	$(CC) $(CFLAGS) -o $(SERVER) $(SERVER_OBJECTS) -lrt -lpthread
 
-runc:
-	./cliente
+runc1:
+	./cliente 1
 
+runc2:
+	./cliente 2
+
+runc3:
+	./cliente 3
 runs:
 	./servidor
 

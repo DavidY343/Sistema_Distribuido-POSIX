@@ -25,7 +25,6 @@ void treat_request(void *mess)
 	not_finished = false;
 	pthread_cond_signal(&cond_mensaje);
 	pthread_mutex_unlock(&mutex_mensaje);
-	pthread_exit(0);
 	switch (message.op)
 	{
 		case 0:
@@ -68,12 +67,13 @@ void treat_request(void *mess)
 			mq_unlink("/SERVER");
 			mq_close(q_client);
 		}
-		printf("Mensaje enviado\n");
 	}
+	
+	pthread_exit(0);
 
 }
 
-void print_message(struct request message) {
+/*void print_message(struct request message) {
     printf("Operation: %d\n", message.op);
     printf("Node: key=%d, v1=%s, N=%d\n", message.key, message.v1, message.N);
     printf("Queue: %s\n", message.queue);
@@ -82,7 +82,7 @@ void print_message(struct request message) {
         printf("%f ", message.v2[i]);
     }
     printf("\n");
-}
+}*/
 
 int main(void)
 	{
@@ -106,13 +106,11 @@ int main(void)
 	pthread_attr_setdetachstate(&t_attr, PTHREAD_CREATE_DETACHED);
 	while(1)
 	{
-		printf("Esperando Mensaje\n");
 		if (mq_receive(q_server, (char *) &message, sizeof(struct request), NULL) < 0 )
 		{
 			perror("mq_receive");
 			return -1;
 		}
-		print_message(message);
 		if (pthread_create(&thid, &t_attr, (void *)treat_request, (void *)&message)== 0)
 		{
 			pthread_mutex_lock(&mutex_mensaje);

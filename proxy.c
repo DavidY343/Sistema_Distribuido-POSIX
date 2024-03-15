@@ -154,10 +154,13 @@ int get_value_proxy(int key, char *value1, int *N_value2, double *V_value2)
 	else
 	{
 		printf("Your values: v1: %s, N2: %d\n", res.v1, res.N);
+		strcpy(value1, res.v1);
+		*N_value2 = res.N;
 		printf("Contenido de v2:\n");
     	for(int i = 0; i < res.N; i++)
 		{
         	printf("%f ", res.v2[i]);
+			V_value2[i] = res.v2[i];
 		}
 		printf("\n");
 		return (0);
