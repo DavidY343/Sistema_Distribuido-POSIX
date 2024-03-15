@@ -18,8 +18,6 @@ CLIENT_OBJECTS = $(CLIENT_SOURCES:.c=.o)
 CLIENT = cliente
 
 all: $(PROXY) $(SERVER) $(CLIENT)
-	
-
 
 $(PROXY): $(PROXY_OBJECTS)
 	$(CC) -shared -o $(PROXY) $(PROXY_OBJECTS) -lrt
