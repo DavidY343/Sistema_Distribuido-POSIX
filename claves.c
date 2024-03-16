@@ -6,7 +6,7 @@
 List messages;
 
 int inited_list = 0;
-pthread_mutex_t mutex;
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 int init()
 {
